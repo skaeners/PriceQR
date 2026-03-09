@@ -37,23 +37,19 @@ class _ProfileUserWidgetState extends State<ProfileUserWidget> {
     super.dispose();
   }
 
-  // Función para cerrar sesión - CORREGIDA
   Future<void> _signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
-      // ✅ Navegar a la pantalla de login - usa el nombre CORRECTO de tu ruta
       context.goNamed(LoginWidget.routeName);
     } catch (e) {
-      print('Error durante logout: $e');
-      // Mostrar mensaje de error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al cerrar sesión: $e')),
       );
     }
   }
 
-  // Función para mostrar modal elegante - CORREGIDA
-  void _showComingSoonModal(BuildContext context, {String featureName = 'esta función'}) {
+  void _showComingSoonModal(BuildContext context,
+      {String featureName = 'esta función'}) {
     showDialog(
       context: context,
       barrierColor: Colors.black54,
@@ -80,7 +76,6 @@ class _ProfileUserWidgetState extends State<ProfileUserWidget> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Icono decorativo
                   Container(
                     width: 80,
                     height: 80,
@@ -94,53 +89,39 @@ class _ProfileUserWidgetState extends State<ProfileUserWidget> {
                       color: Color(0xFF1E1E2D),
                     ),
                   ),
-                  
                   SizedBox(height: 20),
-                  
-                  // Título
                   Text(
                     '¡Próximamente! 🚀',
                     style: FlutterFlowTheme.of(context).headlineSmall.override(
-                      font: GoogleFonts.karla(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      color: Color(0xFF1E1E2D),
-                      fontSize: 22,
-                    ),
+                          font: GoogleFonts.karla(fontWeight: FontWeight.bold),
+                          color: Color(0xFF1E1E2D),
+                          fontSize: 22,
+                        ),
                     textAlign: TextAlign.center,
                   ),
-                  
                   SizedBox(height: 15),
-                  
-                  // Descripción - CORREGIDA
                   Text(
                     '$featureName estará disponible en la próxima versión de PriceQR.',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      font: GoogleFonts.karla(),
-                      color: FlutterFlowTheme.of(context).secondaryText,
-                      fontSize: 16,
-                      lineHeight: 1.4,   // ✅ CORRECTO
-                    ),
+                          font: GoogleFonts.karla(),
+                          color: FlutterFlowTheme.of(context).secondaryText,
+                          fontSize: 16,
+                          lineHeight: 1.4,
+                        ),
                     textAlign: TextAlign.center,
                   ),
-                  
                   SizedBox(height: 10),
-                  
-                  // Mensaje adicional
                   Text(
                     'Estamos trabajando para brindarte la mejor experiencia.',
                     style: FlutterFlowTheme.of(context).bodySmall.override(
-                      font: GoogleFonts.karla(),
-                      color: FlutterFlowTheme.of(context).secondaryText,
-                      fontSize: 14,
-                      fontStyle: FontStyle.italic,
-                    ),
+                          font: GoogleFonts.karla(),
+                          color: FlutterFlowTheme.of(context).secondaryText,
+                          fontSize: 14,
+                          fontStyle: FontStyle.italic,
+                        ),
                     textAlign: TextAlign.center,
                   ),
-                  
                   SizedBox(height: 25),
-                  
-                  // Botón de aceptar
                   FFButtonWidget(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -149,21 +130,15 @@ class _ProfileUserWidgetState extends State<ProfileUserWidget> {
                     options: FFButtonOptions(
                       width: double.infinity,
                       height: 50,
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                      iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                       color: Color(0xFF1E1E2D),
-                      textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                        font: GoogleFonts.karla(
-                          fontWeight: FontWeight.w600,
-                        ),
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
+                      textStyle:
+                          FlutterFlowTheme.of(context).titleSmall.override(
+                                font: GoogleFonts.karla(
+                                    fontWeight: FontWeight.w600),
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
                       elevation: 2,
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
-                        width: 1,
-                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -184,105 +159,92 @@ class _ProfileUserWidgetState extends State<ProfileUserWidget> {
       body: Stack(
         children: [
           Column(
-            mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                width: MediaQuery.sizeOf(context).width * 1.0,
-                height: 160.0,
+                width: double.infinity,
+                height: 190,
                 decoration: BoxDecoration(
-                  color: Color(0xFF1E1E2D),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xFF1E1E2D),
+                      Color(0xFF2A2A40),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                 ),
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(20.0, 40.0, 20.0, 0.0),
+                  padding: EdgeInsets.fromLTRB(20, 50, 20, 0),
                   child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Card(
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        color: FlutterFlowTheme.of(context).alternate,
-                        elevation: 0.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 12,
+                              color: Colors.black.withOpacity(0.4),
+                              offset: Offset(0, 6),
+                            )
+                          ],
                         ),
-                        child: Padding(
-                          padding: EdgeInsets.all(2.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50.0),
-                            child: Image.network(
-                              'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHw2fHxwZXJmaWx8ZW58MHx8fHwxNzU5NTI3NzE2fDA&ixlib=rb-4.1.0&q=80&w=1080',
-                              width: 80.0,
-                              height: 80.0,
-                              fit: BoxFit.cover,
+                        child: CircleAvatar(
+                          radius: 42,
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                            radius: 38,
+                            backgroundImage: NetworkImage(
+                              'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde',
                             ),
                           ),
                         ),
                       ),
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FutureBuilder<DocumentSnapshot>(
-                                future: FirebaseFirestore.instance
-                                    .collection('usuarios')
-                                    .doc(FirebaseAuth.instance.currentUser?.uid)
-                                    .get(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return Container(
-                                      width: 20,
-                                      height: 20,
-                                      child: const CircularProgressIndicator(
-                                        color: Colors.white,
-                                        strokeWidth: 2,
-                                      ),
-                                    );
-                                  }
-                                  if (!snapshot.hasData || !snapshot.data!.exists) {
-                                    return const Text(
-                                      'Usuario no encontrado',
-                                      style: TextStyle(color: Colors.white),
-                                    );
-                                  }
+                          padding: EdgeInsets.only(left: 14),
+                          child: FutureBuilder<DocumentSnapshot>(
+                            future: FirebaseFirestore.instance
+                                .collection('usuarios')
+                                .doc(FirebaseAuth.instance.currentUser?.uid)
+                                .get(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator(
+                                    color: Colors.white);
+                              }
 
-                                  final userData = snapshot.data!.data() as Map<String, dynamic>;
-                                  final nombre = userData['nombre'] ?? 'Usuario';
-                                  final correo = userData['correo'] ?? FirebaseAuth.instance.currentUser?.email ?? '';
+                              final userData =
+                                  snapshot.data?.data() as Map<String, dynamic>?;
 
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        nombre,
-                                        style: FlutterFlowTheme.of(context)
-                                            .headlineSmall
-                                            .override(
-                                              font: GoogleFonts.karla(),
-                                              color: Color(0xFFFFC107),
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                                        child: Text(
-                                          correo,
-                                          style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                font: GoogleFonts.plusJakartaSans(),
-                                                color: Color(0xFFB0BEC5),
-                                              ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ],
+                              final nombre = userData?['nombre'] ?? 'Usuario';
+                              final correo = userData?['correo'] ??
+                                  FirebaseAuth.instance.currentUser?.email ??
+                                  '';
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    nombre,
+                                    style: GoogleFonts.karla(
+                                      color: Color(0xFFFFC107),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 6),
+                                  Text(
+                                    correo,
+                                    style: GoogleFonts.karla(
+                                      color: Color(0xFFB0BEC5),
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -290,67 +252,63 @@ class _ProfileUserWidgetState extends State<ProfileUserWidget> {
                   ),
                 ),
               ),
-              
-              // Edit Profile
+
+              SizedBox(height: 10),
+
               _buildMenuCard(
                 title: 'Edit Profile',
                 icon: Icons.edit,
                 iconColor: FlutterFlowTheme.of(context).primaryText,
-                onTap: () => context.pushNamed(EditarPerfilUsuarioWidget.routeName),
+                onTap: () =>
+                    context.pushNamed(EditarPerfilUsuarioWidget.routeName),
               ),
-              
-              // Notification Settings
+
               _buildMenuCard(
                 title: 'Notification Settings',
                 icon: Icons.notifications_sharp,
                 iconColor: Color(0xFFDD932C),
-                onTap: () => _showComingSoonModal(context, featureName: 'La configuración de notificaciones'),
+                onTap: () => _showComingSoonModal(context,
+                    featureName: 'La configuración de notificaciones'),
               ),
-              
-              // About the App
+
               _buildMenuCard(
                 title: 'About the App',
                 icon: Icons.info,
                 iconColor: Color(0xFF1F84D0),
-                onTap: () => _showComingSoonModal(context, featureName: 'La información sobre la app'),
+                onTap: () => _showComingSoonModal(context,
+                    featureName: 'La información sobre la app'),
               ),
-              
-              // Contact Support
+
               _buildMenuCard(
                 title: 'Contact Support',
                 icon: Icons.support_agent,
                 iconColor: Color(0xFF171817),
-                onTap: () => _showComingSoonModal(context, featureName: 'El soporte al cliente'),
+                onTap: () => _showComingSoonModal(context,
+                    featureName: 'El soporte al cliente'),
               ),
-              
-              // Log Out Button
+
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 104.0, 0.0, 40.0),
+                padding: EdgeInsets.only(top: 80),
                 child: FFButtonWidget(
-                  onPressed: _signOut, // ✅ Funcionalidad de logout corregida
+                  onPressed: _signOut,
                   text: 'Log Out',
+                  icon: Icon(Icons.logout, size: 18),
                   options: FFButtonOptions(
-                    width: 110.0,
-                    height: 50.0,
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    iconPadding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    width: 170,
+                    height: 52,
                     color: Color(0xFF1E1E2D),
-                    textStyle: FlutterFlowTheme.of(context).bodyLarge.override(
-                          font: GoogleFonts.karla(),
-                          color: Colors.white,
-                          letterSpacing: 0.0,
-                        ),
-                    elevation: 3.0,
-                    borderSide: BorderSide(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      width: 1.0,
+                    textStyle: GoogleFonts.karla(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
                     ),
-                    borderRadius: BorderRadius.circular(12.0),
+                    elevation: 6,
+                    borderRadius: BorderRadius.circular(14),
                   ),
                 ),
               ),
             ],
           ),
+
           wrapWithModel(
             model: _model.navBarModel,
             updateCallback: () => safeSetState(() {}),
@@ -361,7 +319,6 @@ class _ProfileUserWidgetState extends State<ProfileUserWidget> {
     );
   }
 
-  // Widget reutilizable para las tarjetas del menú
   Widget _buildMenuCard({
     required String title,
     required IconData icon,
@@ -369,57 +326,54 @@ class _ProfileUserWidgetState extends State<ProfileUserWidget> {
     VoidCallback? onTap,
   }) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
-      child: Material(
-        color: Colors.transparent,
-        elevation: 0.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: Container(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
           width: double.infinity,
-          height: 60.0,
+          height: 70,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
+            borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                blurRadius: 3.0,
-                color: Color(0x33000000),
-                offset: Offset(0.0, 1.0),
+                blurRadius: 12,
+                color: Colors.black.withOpacity(0.08),
+                offset: const Offset(0, 6),
               )
             ],
-            borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(
-              color: FlutterFlowTheme.of(context).secondaryBackground,
-              width: 0.0,
-            ),
           ),
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
-            child: InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: onTap,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            child: Row(
+              children: [
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: iconColor.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(icon, color: iconColor, size: 22),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
                     title,
-                    style: FlutterFlowTheme.of(context).bodyLarge.override(
-                          font: GoogleFonts.karla(),
-                          letterSpacing: 0.0,
-                        ),
+                    style: GoogleFonts.karla(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
                   ),
-                  Icon(
-                    icon,
-                    color: iconColor,
-                    size: 24.0,
-                  ),
-                ],
-              ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 18,
+                  color: FlutterFlowTheme.of(context).secondaryText,
+                ),
+              ],
             ),
           ),
         ),
