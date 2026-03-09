@@ -36,7 +36,7 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
     },
     {
       "name": "System Update",
-      "message": "Main gate will be down for maintenance for 4 hours.",
+      "message": "Main gate maintenance for 4 hours.",
       "time": "9 hr ago",
       "image": "assets/images/Ellipse_65.png",
       "read": true
@@ -50,6 +50,9 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
     },
   ];
 
+  int get unreadCount =>
+      notifications.where((n) => n["read"] == false).length;
+
   @override
   void initState() {
     super.initState();
@@ -62,6 +65,20 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
     super.dispose();
   }
 
+  void markAllAsRead() {
+    setState(() {
+      for (var n in notifications) {
+        n["read"] = true;
+      }
+    });
+  }
+
+  void clearAll() {
+    setState(() {
+      notifications.clear();
+    });
+  }
+
   Widget notificationCard(int index) {
     final item = notifications[index];
 
@@ -69,13 +86,13 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
       key: Key(item["name"] + index.toString()),
       direction: DismissDirection.endToStart,
       background: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
         decoration: BoxDecoration(
           color: Colors.red,
           borderRadius: BorderRadius.circular(16),
         ),
         alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
+        padding: const EdgeInsets.only(right: 25),
         child: const Icon(Icons.delete, color: Colors.white),
       ),
       onDismissed: (direction) {
@@ -84,57 +101,38 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
         });
       },
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
         onTap: () {
           setState(() {
             notifications[index]["read"] = true;
           });
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Notification opened"),
-              duration: const Duration(seconds: 1),
-            ),
-          );
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            gradient: item["read"]
-                ? const LinearGradient(
-                    colors: [Colors.white, Colors.white],
-                  )
-                : const LinearGradient(
-                    colors: [
-                      Color(0xFFE8F1FF),
-                      Color(0xFFF6F9FF)
-                    ],
-                  ),
-            borderRadius: BorderRadius.circular(16),
+            color: item["read"] ? Colors.white : const Color(0xFFEFF4FF),
+            borderRadius: BorderRadius.circular(18),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
+                blurRadius: 12,
                 offset: const Offset(0, 6),
               )
             ],
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
+              /// Avatar
               Stack(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: Image.asset(
-                      item["image"],
-                      width: 48,
-                      height: 48,
-                      fit: BoxFit.cover,
-                    ),
+                  CircleAvatar(
+                    radius: 26,
+                    backgroundImage: AssetImage(item["image"]),
                   ),
+
                   if (!item["read"])
                     Positioned(
                       right: 0,
@@ -150,36 +148,43 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
                     ),
                 ],
               ),
-              const SizedBox(width: 12),
+
+              const SizedBox(width: 14),
+
+              /// Message
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
                     Text(
                       item["name"],
                       style: GoogleFonts.karla(
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                         fontSize: 15,
-                        color: const Color(0xFF060518),
                       ),
                     ),
+
                     const SizedBox(height: 4),
+
                     Text(
                       item["message"],
                       style: GoogleFonts.karla(
                         fontSize: 13,
-                        color: const Color(0xFF3C3E56),
+                        color: Colors.grey[700],
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
+
+              const SizedBox(width: 10),
+
+              /// Time
               Text(
                 item["time"],
                 style: GoogleFonts.karla(
                   fontSize: 11,
-                  fontStyle: FontStyle.italic,
                   color: Colors.grey,
                 ),
               ),
@@ -190,16 +195,52 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
     );
   }
 
+  Widget emptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+
+          Icon(
+            Icons.notifications_off,
+            size: 80,
+            color: Colors.grey[400],
+          ),
+
+          const SizedBox(height: 16),
+
+          Text(
+            "No Notifications",
+            style: GoogleFonts.karla(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          const SizedBox(height: 6),
+
+          Text(
+            "You're all caught up!",
+            style: GoogleFonts.karla(
+              color: Colors.grey,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
-        FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: const Color(0xFFF6F7FB),
+
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
@@ -211,17 +252,69 @@ class _NotificationsWidgetState extends State<NotificationsWidget> {
             "Notifications",
             style: GoogleFonts.karla(
               color: Colors.black,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
           ),
+
+          actions: [
+
+            if (notifications.isNotEmpty)
+              IconButton(
+                icon: const Icon(Icons.done_all, color: Colors.black),
+                onPressed: markAllAsRead,
+              ),
+
+            if (notifications.isNotEmpty)
+              IconButton(
+                icon: const Icon(Icons.delete_outline, color: Colors.black),
+                onPressed: clearAll,
+              ),
+          ],
         ),
-        body: ListView.builder(
-          padding: const EdgeInsets.only(top: 10, bottom: 20),
-          itemCount: notifications.length,
-          itemBuilder: (context, index) {
-            return notificationCard(index);
-          },
+
+        body: Column(
+          children: [
+
+            /// Unread indicator
+            if (unreadCount > 0)
+              Container(
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16, vertical: 10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFF4FF),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+
+                    const Icon(Icons.notifications_active,
+                        color: Colors.blue),
+
+                    const SizedBox(width: 10),
+
+                    Text(
+                      "$unreadCount unread notifications",
+                      style: GoogleFonts.karla(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+            Expanded(
+              child: notifications.isEmpty
+                  ? emptyState()
+                  : ListView.builder(
+                      itemCount: notifications.length,
+                      itemBuilder: (context, index) {
+                        return notificationCard(index);
+                      },
+                    ),
+            ),
+          ],
         ),
       ),
     );
